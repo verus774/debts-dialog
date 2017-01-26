@@ -27,9 +27,18 @@ public class Debt extends Model {
         this.sum = sum;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public int getSum() {
+        return sum;
+    }
+
     public static List<Debt> getAll() {
         return new Select()
                 .from(Debt.class)
+
                 .orderBy("title ASC")
                 .execute();
     }
