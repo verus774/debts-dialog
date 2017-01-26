@@ -1,11 +1,16 @@
 package by.verus.debts;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,18 +40,42 @@ public class MainActivity extends AppCompatActivity {
         ActiveAndroid.initialize(this);
 
         debtsTv = (TextView) findViewById(R.id.debtsTv);
-        titleEt = (EditText) findViewById(R.id.titleEt);
-        sumEt = (EditText) findViewById(R.id.sumEt);
+
         debtsRw = (RecyclerView) findViewById(R.id.debtsRw);
-        debtsRw.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        LinearLayoutManager lm = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(debtsRw.getContext(), lm.getOrientation());
+        debtsRw.setLayoutManager(lm);
+        debtsRw.addItemDecoration(dividerItemDecoration);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Debt(titleEt.getText().toString(), Integer.parseInt(sumEt.getText().toString())).save();
-                updateList();
-                clearForm();
+                final Context context = view.getContext();
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                final View formElementsView = View.inflate(context, R.layout.dialog_add_debt, null);
+
+                titleEt = (EditText) formElementsView.findViewById(R.id.titleEt);
+                sumEt = (EditText) formElementsView.findViewById(R.id.sumEt);
+
+                new AlertDialog.Builder(context)
+                        .setView(formElementsView)
+                        .setTitle("Create debt")
+                        .setPositiveButton("Add",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        new Debt(titleEt.getText().toString(), Integer.parseInt(sumEt.getText().toString())).save();
+                                        updateList();
+                                        clearForm();
+                                    }
+                                })
+                        .setNegativeButton("Cancel",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                })
+                        .show();
             }
         });
 
