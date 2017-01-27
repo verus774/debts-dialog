@@ -29,4 +29,5 @@ dependencies {
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:recyclerview-v7:25.1.0'
+    compile 'com.basgeekball:awesome-validation:2.0'
 }

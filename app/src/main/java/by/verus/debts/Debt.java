@@ -38,7 +38,6 @@ public class Debt extends Model {
     public static List<Debt> getAll() {
         return new Select()
                 .from(Debt.class)
-
                 .orderBy("title ASC")
                 .execute();
     }

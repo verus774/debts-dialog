@@ -4,4 +4,5 @@
     <string name="hint_title">title</string>
     <string name="hint_sum">sum</string>
     <string name="btn_clear_all">Clear all</string>
+    <string name="err_required">Required field</string>
 </resources>
