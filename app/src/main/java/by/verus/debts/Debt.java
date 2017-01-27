@@ -5,45 +5,76 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
+import java.util.Date;
 import java.util.List;
 
 @Table(name = "debts")
 public class Debt extends Model {
 
-    @Column(name = "title")
-    public String title;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "sum")
-    public int sum;
+    private int sum;
+
+    @Column(name = "timestamp", index = true)
+    private Date timestamp;
+
 
     public Debt() {
         super();
     }
 
-    public Debt(String title, int sum) {
+    public Debt(String name, int sum) {
         super();
 
-        this.title = title;
+        this.name = name;
         this.sum = sum;
+        this.timestamp = new Date();
     }
 
-    public String getTitle() {
-        return title;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getSum() {
         return sum;
     }
 
+    public void setSum(int sum) {
+        this.sum = sum;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
+
+
     public static List<Debt> getAll() {
         return new Select()
                 .from(Debt.class)
-                .orderBy("title ASC")
+                .orderBy("timestamp DESC")
                 .execute();
+    }
+
+    public static Debt findById(String id) {
+        return new Select()
+                .from(Debt.class)
+                .where("guid = ?", id)
+                .executeSingle();
     }
 
     @Override
     public String toString() {
-        return "debt: [" + this.title + ", " + this.sum + "]";
+        return "debt: [" + this.name + ", " + this.sum + "]";
     }
 }

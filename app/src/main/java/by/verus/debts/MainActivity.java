@@ -31,7 +31,7 @@ import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText titleEt;
+    private EditText nameEt;
     private EditText sumEt;
     private RecyclerView debtsRw;
     private CoordinatorLayout mCoordinatorLayout;
@@ -62,11 +62,11 @@ public class MainActivity extends AppCompatActivity {
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View formElementsView = View.inflate(context, R.layout.dialog_add_debt, null);
 
-                titleEt = (EditText) formElementsView.findViewById(R.id.titleEt);
+                nameEt = (EditText) formElementsView.findViewById(R.id.nameEt);
                 sumEt = (EditText) formElementsView.findViewById(R.id.sumEt);
 
                 mAwesomeValidation = new AwesomeValidation(BASIC);
-                mAwesomeValidation.addValidation(titleEt, RegexTemplate.NOT_EMPTY, getString(R.string.err_required));
+                mAwesomeValidation.addValidation(nameEt, RegexTemplate.NOT_EMPTY, getString(R.string.err_required));
                 mAwesomeValidation.addValidation(sumEt, RegexTemplate.NOT_EMPTY, getString(R.string.err_required));
 
                 final AlertDialog dialog = new AlertDialog.Builder(context)
@@ -82,7 +82,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         if (mAwesomeValidation.validate()) {
-                            new Debt(titleEt.getText().toString(), Integer.parseInt(sumEt.getText().toString())).save();
+                            new Debt(
+                                    nameEt.getText().toString(),
+                                    Integer.parseInt(sumEt.getText().toString())
+                            ).save();
                             updateList();
                             dialog.dismiss();
 

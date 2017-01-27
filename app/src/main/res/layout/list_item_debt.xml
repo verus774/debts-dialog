@@ -1,25 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:paddingBottom="10dp"
+              android:paddingTop="10dp">
 
-    <TextView
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textSize="20sp"
-        android:id="@+id/titleTv"
-        tools:text="title"
-        android:textColor="@android:color/black" />
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:id="@+id/nameTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            tools:text="Vasya"/>
+
+        <TextView
+            android:id="@+id/sumTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            tools:text="1000"/>
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/sumTv"
-        tools:text="1000"
-        android:textColor="@android:color/black" />
+        android:layout_height="0dp"
+        android:id="@+id/dateTv"
+        android:layout_weight="1"
+        tools:text="Date: Jan 27"
+        android:text="Date: "
+        />
+
 </LinearLayout>
