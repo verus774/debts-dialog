@@ -1,10 +1,10 @@
 package by.verus.debts;
 
 import android.app.Application;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.activeandroid.ActiveAndroid;
-
-import java.util.Date;
 
 public class DebtApplication extends Application {
 
@@ -13,14 +13,15 @@ public class DebtApplication extends Application {
         super.onCreate();
         ActiveAndroid.initialize(this);
 
-        ActiveAndroid.beginTransaction();
-        try {
-            for (int i = 1; i <= 20; i++) {
-                new Debt("Vasya " + i, 100, new Date()).save();
-            }
-            ActiveAndroid.setTransactionSuccessful();
-        } finally {
-            ActiveAndroid.endTransaction();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isFirstRun = prefs.getBoolean("first_run", true);
+
+        if (isFirstRun) {
+            Debt.generateDebts(10);
+
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("first_run", false);
+            editor.apply();
         }
     }
 }

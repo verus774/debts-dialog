@@ -30,9 +30,9 @@ import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText nameEt;
-    private EditText sumEt;
-    private RecyclerView debtsRw;
+    private EditText mNameEt;
+    private EditText mSumEt;
+    private RecyclerView mDebtsRw;
     private CoordinatorLayout mCoordinatorLayout;
     private AwesomeValidation mAwesomeValidation;
 
@@ -44,12 +44,12 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
-        debtsRw = (RecyclerView) findViewById(R.id.debtsRw);
+        mDebtsRw = (RecyclerView) findViewById(R.id.debtsRw);
 
         LinearLayoutManager lm = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(debtsRw.getContext(), lm.getOrientation());
-        debtsRw.setLayoutManager(lm);
-        debtsRw.addItemDecoration(dividerItemDecoration);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mDebtsRw.getContext(), lm.getOrientation());
+        mDebtsRw.setLayoutManager(lm);
+        mDebtsRw.addItemDecoration(dividerItemDecoration);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -59,12 +59,12 @@ public class MainActivity extends AppCompatActivity {
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View formElementsView = View.inflate(context, R.layout.dialog_add_update_debt, null);
 
-                nameEt = (EditText) formElementsView.findViewById(R.id.nameEt);
-                sumEt = (EditText) formElementsView.findViewById(R.id.sumEt);
+                mNameEt = (EditText) formElementsView.findViewById(R.id.nameEt);
+                mSumEt = (EditText) formElementsView.findViewById(R.id.sumEt);
 
                 mAwesomeValidation = new AwesomeValidation(BASIC);
-                mAwesomeValidation.addValidation(nameEt, RegexTemplate.NOT_EMPTY, getString(R.string.err_required));
-                mAwesomeValidation.addValidation(sumEt, RegexTemplate.NOT_EMPTY, getString(R.string.err_required));
+                mAwesomeValidation.addValidation(mNameEt, RegexTemplate.NOT_EMPTY, getString(R.string.err_required));
+                mAwesomeValidation.addValidation(mSumEt, RegexTemplate.NOT_EMPTY, getString(R.string.err_required));
 
                 final AlertDialog dialog = new AlertDialog.Builder(context)
                         .setView(formElementsView)
@@ -80,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         if (mAwesomeValidation.validate()) {
                             new Debt(
-                                    nameEt.getText().toString(),
-                                    Integer.parseInt(sumEt.getText().toString()),
+                                    mNameEt.getText().toString(),
+                                    Integer.parseInt(mSumEt.getText().toString()),
                                     new Date()
                             ).save();
                             updateList();
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateList() {
         List<Debt> storedDebts = Debt.getAll();
-        debtsRw.setAdapter(new RecyclerViewAdapter(storedDebts));
+        mDebtsRw.setAdapter(new RecyclerViewAdapter(storedDebts));
     }
 
     @Override

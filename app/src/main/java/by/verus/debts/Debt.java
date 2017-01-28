@@ -1,5 +1,6 @@
 package by.verus.debts;
 
+import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -71,6 +72,18 @@ public class Debt extends Model {
                 .from(Debt.class)
                 .where("guid = ?", id)
                 .executeSingle();
+    }
+
+    public static void generateDebts(int count) {
+        ActiveAndroid.beginTransaction();
+        try {
+            for (int i = 1; i <= count; i++) {
+                new Debt("Vasya " + i, 100, new Date()).save();
+            }
+            ActiveAndroid.setTransactionSuccessful();
+        } finally {
+            ActiveAndroid.endTransaction();
+        }
     }
 
     @Override
