@@ -25,12 +25,12 @@ public class Debt extends Model {
         super();
     }
 
-    public Debt(String name, int sum) {
+    public Debt(String name, int sum, Date timestamp) {
         super();
 
         this.name = name;
         this.sum = sum;
-        this.timestamp = new Date();
+        this.timestamp = timestamp;
     }
 
 

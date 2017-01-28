@@ -17,13 +17,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 
 import com.activeandroid.query.Delete;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 
+import java.util.Date;
 import java.util.List;
 
 import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(final View view) {
                 final Context context = view.getContext();
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                final View formElementsView = View.inflate(context, R.layout.dialog_add_debt, null);
+                final View formElementsView = View.inflate(context, R.layout.dialog_add_update_debt, null);
 
                 nameEt = (EditText) formElementsView.findViewById(R.id.nameEt);
                 sumEt = (EditText) formElementsView.findViewById(R.id.sumEt);
@@ -81,7 +81,8 @@ public class MainActivity extends AppCompatActivity {
                         if (mAwesomeValidation.validate()) {
                             new Debt(
                                     nameEt.getText().toString(),
-                                    Integer.parseInt(sumEt.getText().toString())
+                                    Integer.parseInt(sumEt.getText().toString()),
+                                    new Date()
                             ).save();
                             updateList();
                             dialog.dismiss();
@@ -94,15 +95,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-            }
-        });
-
-        Button clearBtn = (Button) findViewById(R.id.clearBtn);
-        clearBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Delete().from(Debt.class).execute();
-                updateList();
             }
         });
 
@@ -129,7 +121,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_clear_all) {
+            new Delete().from(Debt.class).execute();
+            updateList();
             return true;
         }
 

@@ -14,18 +14,6 @@
     tools:context="by.verus.debts.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <Button
-        android:text="@string/btn_clear_all"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/clearBtn"
-        style="@style/Widget.AppCompat.Button.Colored" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/debtsTv" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/debtsRw"
         android:layout_width="match_parent"
