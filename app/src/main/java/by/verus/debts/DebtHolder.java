@@ -1,14 +1,20 @@
 package by.verus.debts;
 
 
+import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.utility.RegexTemplate;
+
 import java.text.DateFormat;
 import java.util.Locale;
+
+import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
 public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -40,7 +46,8 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        View formElementsView = View.inflate(v.getContext(), R.layout.dialog_add_update_debt, null);
+        final Context context = v.getContext();
+        View formElementsView = View.inflate(context, R.layout.dialog_add_update_debt, null);
 
         EditText nameEt = (EditText) formElementsView.findViewById(R.id.nameEt);
         EditText sumEt = (EditText) formElementsView.findViewById(R.id.sumEt);
@@ -48,12 +55,25 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
         nameEt.append(mDebt.getName());
         sumEt.append(String.valueOf(mDebt.getSum()));
 
-        new AlertDialog.Builder(v.getContext())
+        final AwesomeValidation awesomeValidation = new AwesomeValidation(BASIC);
+        awesomeValidation.addValidation(nameEt, RegexTemplate.NOT_EMPTY, context.getString(R.string.err_required));
+        awesomeValidation.addValidation(sumEt, RegexTemplate.NOT_EMPTY, context.getString(R.string.err_required));
+
+        final AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(formElementsView)
                 .setTitle("Edit debt")
                 .setPositiveButton("Save", null)
                 .setNegativeButton("Cancel", null)
-                .create()
-                .show();
+                .create();
+
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (awesomeValidation.validate()) {
+                    dialog.dismiss();
+                }
+            }
+        });
     }
 }
