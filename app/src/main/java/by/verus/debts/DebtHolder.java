@@ -4,8 +4,10 @@ package by.verus.debts;
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.activeandroid.query.Update;
@@ -30,6 +32,19 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
         nameTv = (TextView) itemView.findViewById(R.id.nameTv);
         sumTv = (TextView) itemView.findViewById(R.id.sumTv);
         dateTv = (TextView) itemView.findViewById(R.id.dateTv);
+
+        itemView.findViewById(R.id.moreBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
+                Menu menu = popupMenu.getMenu();
+
+                popupMenu.getMenuInflater().inflate(R.menu.menu_item_debt, menu);
+                popupMenu.show();
+
+                // TODO
+            }
+        });
 
         itemView.setOnClickListener(this);
     }
