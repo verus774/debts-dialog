@@ -6,6 +6,7 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -75,15 +76,20 @@ public class Debt extends Model {
     }
 
     public static void generateDebts(int count) {
+        Calendar calendar = Calendar.getInstance();
+
         ActiveAndroid.beginTransaction();
         try {
             for (int i = 1; i <= count; i++) {
-                new Debt("Vasya " + i, 100, new Date()).save();
+                calendar.add(Calendar.DATE, -2);
+                Date date = calendar.getTime();
+                new Debt("Vasya " + i, i * 100, date).save();
             }
             ActiveAndroid.setTransactionSuccessful();
         } finally {
             ActiveAndroid.endTransaction();
         }
+
     }
 
     @Override
