@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         mDebtsRv = (RecyclerView) findViewById(R.id.debtsRv);
 
-        LinearLayoutManager lm = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager lm = new LinearLayoutManager(this);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mDebtsRv.getContext(), lm.getOrientation());
         mDebtsRv.setLayoutManager(lm);
         mDebtsRv.addItemDecoration(dividerItemDecoration);

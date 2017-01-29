@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.activeandroid.query.Update;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 
@@ -49,8 +50,8 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
         final Context context = v.getContext();
         View formElementsView = View.inflate(context, R.layout.dialog_add_update_debt, null);
 
-        EditText nameEt = (EditText) formElementsView.findViewById(R.id.nameEt);
-        EditText sumEt = (EditText) formElementsView.findViewById(R.id.sumEt);
+        final EditText nameEt = (EditText) formElementsView.findViewById(R.id.nameEt);
+        final EditText sumEt = (EditText) formElementsView.findViewById(R.id.sumEt);
 
         nameEt.append(mDebt.getName());
         sumEt.append(String.valueOf(mDebt.getSum()));
@@ -71,6 +72,11 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
             @Override
             public void onClick(View v) {
                 if (awesomeValidation.validate()) {
+                    new Update(Debt.class)
+                            .set("name=?," + "sum=?", nameEt.getText(), Integer.valueOf(sumEt.getText().toString()))
+                            .where("Id=?", mDebt.getId())
+                            .execute();
+
                     dialog.dismiss();
                 }
             }
