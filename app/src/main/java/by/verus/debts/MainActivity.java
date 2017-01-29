@@ -125,6 +125,9 @@ public class MainActivity extends AppCompatActivity {
             new Delete().from(Debt.class).execute();
             updateList();
             return true;
+        } else if (id == R.id.action_generate_debts) {
+            Debt.generateDebts(10);
+            updateList();
         }
 
         return super.onOptionsItemSelected(item);

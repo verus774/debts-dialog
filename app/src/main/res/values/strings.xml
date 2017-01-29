@@ -4,4 +4,5 @@
     <string name="hint_sum">Sum</string>
     <string name="clear_all">Clear all</string>
     <string name="err_required">Required field</string>
+    <string name="generate_debts">Generate debts</string>
 </resources>

@@ -7,4 +7,9 @@
         android:orderInCategory="100"
         android:title="@string/clear_all"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_generate_debts"
+        android:orderInCategory="100"
+        android:title="@string/generate_debts"
+        app:showAsAction="never" />
 </menu>
