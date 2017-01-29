@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText mNameEt;
     private EditText mSumEt;
-    private RecyclerView mDebtsRw;
+    private RecyclerView mDebtsRv;
     private CoordinatorLayout mCoordinatorLayout;
     private AwesomeValidation mAwesomeValidation;
 
@@ -44,12 +44,12 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
-        mDebtsRw = (RecyclerView) findViewById(R.id.debtsRw);
+        mDebtsRv = (RecyclerView) findViewById(R.id.debtsRv);
 
         LinearLayoutManager lm = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mDebtsRw.getContext(), lm.getOrientation());
-        mDebtsRw.setLayoutManager(lm);
-        mDebtsRw.addItemDecoration(dividerItemDecoration);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mDebtsRv.getContext(), lm.getOrientation());
+        mDebtsRv.setLayoutManager(lm);
+        mDebtsRv.addItemDecoration(dividerItemDecoration);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateList() {
         List<Debt> storedDebts = Debt.getAll();
-        mDebtsRw.setAdapter(new RecyclerViewAdapter(storedDebts));
+        mDebtsRv.setAdapter(new RecyclerViewAdapter(storedDebts));
     }
 
     @Override
