@@ -26,7 +26,6 @@ import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 
 import java.util.Date;
-import java.util.List;
 
 import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
@@ -35,9 +34,10 @@ public class MainActivity extends AppCompatActivity {
     private EditText mNameEt;
     private EditText mSumEt;
     private ImageView mAddContactIv;
-    private RecyclerView mDebtsRv;
+    private static RecyclerView mDebtsRv;
     private CoordinatorLayout mCoordinatorLayout;
     private AwesomeValidation mAwesomeValidation;
+    private static RecyclerViewAdapter mAdapter = null;
 
     private final static int CONTACT_PICKER = 1;
 
@@ -53,8 +53,9 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayoutManager lm = new LinearLayoutManager(this);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mDebtsRv.getContext(), lm.getOrientation());
-        mDebtsRv.setLayoutManager(lm);
+        mDebtsRv.setLayoutManager(new LinearLayoutManager(this));
         mDebtsRv.addItemDecoration(dividerItemDecoration);
+        updateList();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -97,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
                                     Integer.parseInt(mSumEt.getText().toString()),
                                     new Date()
                             ).save();
-                            updateList();
                             dialog.dismiss();
+                            updateList();
 
                             Snackbar snackbar = Snackbar.make(mCoordinatorLayout, "Debt added", Snackbar.LENGTH_SHORT);
                             View snackBarView = snackbar.getView();
@@ -111,12 +112,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        updateList();
     }
 
-    private void updateList() {
-        List<Debt> storedDebts = Debt.getAll();
-        mDebtsRv.setAdapter(new RecyclerViewAdapter(storedDebts));
+    public static void updateList() {
+        mAdapter = new RecyclerViewAdapter(Debt.getAll());
+        mDebtsRv.setAdapter(mAdapter);
+
+        /*if (mAdapter == null) {
+            mAdapter = new RecyclerViewAdapter(Debt.getAll());
+            mDebtsRv.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }*/
     }
 
     @Override

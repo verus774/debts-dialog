@@ -4,12 +4,14 @@ package by.verus.debts;
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Update;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
@@ -23,6 +25,7 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
 
     private TextView nameTv;
     private TextView sumTv;
+    private TextView moreTv;
     private TextView dateTv;
     private Debt mDebt;
 
@@ -32,19 +35,7 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
         nameTv = (TextView) itemView.findViewById(R.id.nameTv);
         sumTv = (TextView) itemView.findViewById(R.id.sumTv);
         dateTv = (TextView) itemView.findViewById(R.id.dateTv);
-
-        itemView.findViewById(R.id.moreBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
-                Menu menu = popupMenu.getMenu();
-
-                popupMenu.getMenuInflater().inflate(R.menu.menu_item_debt, menu);
-                popupMenu.show();
-
-                // TODO
-            }
-        });
+        moreTv = (TextView) itemView.findViewById(R.id.moreTv);
 
         itemView.setOnClickListener(this);
     }
@@ -58,6 +49,32 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
         DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.ENGLISH);
         String strDate = df.format(debt.getTimestamp());
         dateTv.setText(strDate);
+
+        moreTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                PopupMenu popup = new PopupMenu(v.getContext(), v);
+                popup.inflate(R.menu.menu_item_debt);
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.menu_delete:
+                                new Delete()
+                                        .from(Debt.class)
+                                        .where("Id=?", mDebt.getId())
+                                        .execute();
+                                MainActivity.updateList();
+                                Toast.makeText(v.getContext(), "Success deleted", Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                        return false;
+                    }
+                });
+
+                popup.show();
+            }
+        });
     }
 
     @Override
@@ -93,6 +110,9 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
                             .execute();
 
                     dialog.dismiss();
+
+                    MainActivity.updateList();
+                    Toast.makeText(v.getContext(), "Success updated", Toast.LENGTH_SHORT).show();
                 }
             }
         });
