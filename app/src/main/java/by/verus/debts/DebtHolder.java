@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Update;
@@ -65,7 +64,7 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
                                         .where("Id=?", mDebt.getId())
                                         .execute();
                                 MainActivity.updateList();
-                                Toast.makeText(v.getContext(), "Success deleted", Toast.LENGTH_SHORT).show();
+                                MainActivity.showSuccessSnackbar(v.getContext(), "Success deleted");
                                 break;
                         }
                         return false;
@@ -112,7 +111,7 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
                     dialog.dismiss();
 
                     MainActivity.updateList();
-                    Toast.makeText(v.getContext(), "Success updated", Toast.LENGTH_SHORT).show();
+                    MainActivity.showSuccessSnackbar(v.getContext(), "Success updated");
                 }
             }
         });

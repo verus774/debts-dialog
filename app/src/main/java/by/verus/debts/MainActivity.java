@@ -35,9 +35,9 @@ public class MainActivity extends AppCompatActivity {
     private EditText mSumEt;
     private ImageView mAddContactIv;
     private static RecyclerView mDebtsRv;
-    private CoordinatorLayout mCoordinatorLayout;
+    private static CoordinatorLayout mCoordinatorLayout;
     private AwesomeValidation mAwesomeValidation;
-    private static RecyclerViewAdapter mAdapter = null;
+    private static RecyclerViewAdapter mAdapter;
 
     private final static int CONTACT_PICKER = 1;
 
@@ -101,10 +101,7 @@ public class MainActivity extends AppCompatActivity {
                             dialog.dismiss();
                             updateList();
 
-                            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, "Debt added", Snackbar.LENGTH_SHORT);
-                            View snackBarView = snackbar.getView();
-                            snackBarView.setBackgroundColor(ContextCompat.getColor(context, R.color.snackbar_success));
-                            snackbar.show();
+                            showSuccessSnackbar(context, "Debt added");
                         }
                     }
                 });
@@ -166,6 +163,13 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }
+    }
+
+    public static void showSuccessSnackbar(Context context, String message) {
+        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_SHORT);
+        View snackBarView = snackbar.getView();
+        snackBarView.setBackgroundColor(ContextCompat.getColor(context, R.color.snackbar_success));
+        snackbar.show();
     }
 
 }
