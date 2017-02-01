@@ -42,6 +42,7 @@
         android:paddingRight="0dp"
         android:paddingEnd="0dp"
         android:text="&#8942;"
-        android:textAppearance="?android:textAppearanceLarge"/>
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textStyle="normal|bold"/>
 
 </RelativeLayout>

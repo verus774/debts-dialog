@@ -2,6 +2,8 @@ package by.verus.debts;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.CoordinatorLayout;
@@ -20,6 +22,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.activeandroid.query.Delete;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
@@ -33,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText mNameEt;
     private EditText mSumEt;
-    private ImageView mAddContactIv;
+    private ImageView mAddContactIb;
     private static RecyclerView mDebtsRv;
     private static CoordinatorLayout mCoordinatorLayout;
     private AwesomeValidation mAwesomeValidation;
@@ -67,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
                 mNameEt = (EditText) formElementsView.findViewById(R.id.nameEt);
                 mSumEt = (EditText) formElementsView.findViewById(R.id.sumEt);
 
-                mAddContactIv = (ImageView) formElementsView.findViewById(R.id.addContactIv);
-                mAddContactIv.setOnClickListener(new View.OnClickListener() {
+                mAddContactIb = (ImageView) formElementsView.findViewById(R.id.addContactIb);
+                mAddContactIb.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         pickContact();
@@ -159,7 +162,16 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case CONTACT_PICKER:
-                    // TODO
+                    Uri contactData = data.getData();
+                    Cursor cursor = getContentResolver().query(contactData, null, null, null, null);
+
+                    if (cursor != null) {
+                        if (cursor.moveToFirst()) {
+                            String name = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
+                            Toast.makeText(this, name, Toast.LENGTH_LONG).show();
+                        }
+                        cursor.close();
+                    }
                     break;
             }
         }
