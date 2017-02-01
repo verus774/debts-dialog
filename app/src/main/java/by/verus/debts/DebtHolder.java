@@ -79,7 +79,7 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
     @Override
     public void onClick(View v) {
         final Context context = v.getContext();
-        View formElementsView = View.inflate(context, R.layout.dialog_add_update_debt, null);
+        View formElementsView = View.inflate(context, R.layout.fragment_add_debt, null);
 
         final EditText nameEt = (EditText) formElementsView.findViewById(R.id.nameEt);
         final EditText sumEt = (EditText) formElementsView.findViewById(R.id.sumEt);

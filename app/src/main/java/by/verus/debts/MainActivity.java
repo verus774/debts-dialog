@@ -1,16 +1,12 @@
 package by.verus.debts;
 
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,27 +15,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.activeandroid.query.Delete;
-import com.basgeekball.awesomevalidation.AwesomeValidation;
-import com.basgeekball.awesomevalidation.utility.RegexTemplate;
-
-import java.util.Date;
-
-import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText mNameEt;
-    private EditText mSumEt;
-    private ImageView mAddContactIb;
     private static RecyclerView mDebtsRv;
     private static CoordinatorLayout mCoordinatorLayout;
-    private AwesomeValidation mAwesomeValidation;
     private static RecyclerViewAdapter mAdapter;
 
     private final static int CONTACT_PICKER = 1;
@@ -58,57 +40,14 @@ public class MainActivity extends AppCompatActivity {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mDebtsRv.getContext(), lm.getOrientation());
         mDebtsRv.setLayoutManager(new LinearLayoutManager(this));
         mDebtsRv.addItemDecoration(dividerItemDecoration);
+
         updateList();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                final Context context = view.getContext();
-                final View formElementsView = View.inflate(context, R.layout.dialog_add_update_debt, null);
-
-                mNameEt = (EditText) formElementsView.findViewById(R.id.nameEt);
-                mSumEt = (EditText) formElementsView.findViewById(R.id.sumEt);
-
-                mAddContactIb = (ImageView) formElementsView.findViewById(R.id.addContactIb);
-                mAddContactIb.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        pickContact();
-                        // TODO get contact name
-                    }
-                });
-
-                mAwesomeValidation = new AwesomeValidation(BASIC);
-                mAwesomeValidation.addValidation(mNameEt, RegexTemplate.NOT_EMPTY, getString(R.string.err_required));
-                mAwesomeValidation.addValidation(mSumEt, RegexTemplate.NOT_EMPTY, getString(R.string.err_required));
-
-                final AlertDialog dialog = new AlertDialog.Builder(context)
-                        .setView(formElementsView)
-                        .setTitle("Create debt")
-                        .setPositiveButton("Save", null)
-                        .setNegativeButton("Cancel", null)
-                        .create();
-
-                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                dialog.show();
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (mAwesomeValidation.validate()) {
-                            new Debt(
-                                    mNameEt.getText().toString(),
-                                    Integer.parseInt(mSumEt.getText().toString()),
-                                    new Date()
-                            ).save();
-                            dialog.dismiss();
-                            updateList();
-
-                            showSuccessSnackbar(context, "Debt added");
-                        }
-                    }
-                });
-
+                showAddDebtDialog();
             }
         });
 
@@ -153,35 +92,17 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void pickContact() {
-        Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        startActivityForResult(contactPickerIntent, CONTACT_PICKER);
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case CONTACT_PICKER:
-                    Uri contactData = data.getData();
-                    Cursor cursor = getContentResolver().query(contactData, null, null, null, null);
-
-                    if (cursor != null) {
-                        if (cursor.moveToFirst()) {
-                            String name = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
-                            Toast.makeText(this, name, Toast.LENGTH_LONG).show();
-                        }
-                        cursor.close();
-                    }
-                    break;
-            }
-        }
-    }
-
     public static void showSuccessSnackbar(Context context, String message) {
         Snackbar snackbar = Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_SHORT);
         View snackBarView = snackbar.getView();
         snackBarView.setBackgroundColor(ContextCompat.getColor(context, R.color.snackbar_success));
         snackbar.show();
+    }
+
+    private void showAddDebtDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        AddDebtFragment addDebtFragment = AddDebtFragment.newInstance("Add debt");
+        addDebtFragment.show(fm, "ss");
     }
 
 }

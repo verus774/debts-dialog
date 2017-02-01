@@ -6,4 +6,7 @@
     <string name="err_required">Required field</string>
     <string name="generate_debts">Generate debts</string>
     <string name="delete">Delete</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
