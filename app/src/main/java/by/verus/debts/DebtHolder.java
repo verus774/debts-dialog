@@ -2,23 +2,17 @@ package by.verus.debts;
 
 
 import android.content.Context;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.activeandroid.query.Delete;
-import com.activeandroid.query.Update;
-import com.basgeekball.awesomevalidation.AwesomeValidation;
-import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 
 import java.text.DateFormat;
 import java.util.Locale;
-
-import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
 public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -79,41 +73,8 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
     @Override
     public void onClick(View v) {
         final Context context = v.getContext();
-        View formElementsView = View.inflate(context, R.layout.fragment_add_debt, null);
-
-        final EditText nameEt = (EditText) formElementsView.findViewById(R.id.nameEt);
-        final EditText sumEt = (EditText) formElementsView.findViewById(R.id.sumEt);
-
-        nameEt.append(mDebt.getName());
-        sumEt.append(String.valueOf(mDebt.getSum()));
-
-        final AwesomeValidation awesomeValidation = new AwesomeValidation(BASIC);
-        awesomeValidation.addValidation(nameEt, RegexTemplate.NOT_EMPTY, context.getString(R.string.err_required));
-        awesomeValidation.addValidation(sumEt, RegexTemplate.NOT_EMPTY, context.getString(R.string.err_required));
-
-        final AlertDialog dialog = new AlertDialog.Builder(context)
-                .setView(formElementsView)
-                .setTitle("Edit debt")
-                .setPositiveButton("Save", null)
-                .setNegativeButton("Cancel", null)
-                .create();
-
-        dialog.show();
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (awesomeValidation.validate()) {
-                    new Update(Debt.class)
-                            .set("name=?," + "sum=?", nameEt.getText(), Integer.valueOf(sumEt.getText().toString()))
-                            .where("Id=?", mDebt.getId())
-                            .execute();
-
-                    dialog.dismiss();
-
-                    MainActivity.updateList();
-                    MainActivity.showSuccessSnackbar(v.getContext(), "Success updated");
-                }
-            }
-        });
+        FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
+        AddDebtFragment addDebtFragment = AddDebtFragment.newInstance("Edit debt", mDebt.getId());
+        addDebtFragment.show(fm, "ss");
     }
 }

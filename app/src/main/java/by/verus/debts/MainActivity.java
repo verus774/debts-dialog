@@ -24,8 +24,6 @@ public class MainActivity extends AppCompatActivity {
     private static CoordinatorLayout mCoordinatorLayout;
     private static RecyclerViewAdapter mAdapter;
 
-    private final static int CONTACT_PICKER = 1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

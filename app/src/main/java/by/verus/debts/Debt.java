@@ -68,10 +68,10 @@ public class Debt extends Model {
                 .execute();
     }
 
-    public static Debt findById(String id) {
+    public static Debt findById(long id) {
         return new Select()
                 .from(Debt.class)
-                .where("guid = ?", id)
+                .where("Id = ?", id)
                 .executeSingle();
     }
 

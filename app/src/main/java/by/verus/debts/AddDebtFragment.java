@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.activeandroid.query.Update;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 
@@ -40,10 +41,19 @@ public class AddDebtFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         String title = getArguments().getString("title");
+        final long debtId = getArguments().getLong("debtId");
+
         View formElementsView = View.inflate(getActivity(), R.layout.fragment_add_debt, null);
 
         mNameEt = (EditText) formElementsView.findViewById(R.id.nameEt);
         mSumEt = (EditText) formElementsView.findViewById(R.id.sumEt);
+
+        if (debtId != 0) {
+            Debt debt = Debt.findById(debtId);
+
+            mNameEt.append(debt.getName());
+            mSumEt.append(String.valueOf(debt.getSum()));
+        }
 
         mAwesomeValidation = new AwesomeValidation(BASIC);
         mAwesomeValidation.addValidation(mNameEt, RegexTemplate.NOT_EMPTY, getString(R.string.err_required));
@@ -70,16 +80,24 @@ public class AddDebtFragment extends DialogFragment {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (mAwesomeValidation.validate()) {
-                    new Debt(
-                            mNameEt.getText().toString(),
-                            Integer.parseInt(mSumEt.getText().toString()),
-                            new Date()
-                    ).save();
+                    if (debtId == 0) {
+                        new Debt(
+                                mNameEt.getText().toString(),
+                                Integer.parseInt(mSumEt.getText().toString()),
+                                new Date()
+                        ).save();
+                    } else {
+                        new Update(Debt.class)
+                                .set("name=?," + "sum=?", mNameEt.getText(), Integer.valueOf(mSumEt.getText().toString()))
+                                .where("Id=?", debtId)
+                                .execute();
+                    }
 
                     dialog.dismiss();
                     MainActivity.updateList();
-                    MainActivity.showSuccessSnackbar(getActivity(), "Debt added");
+                    MainActivity.showSuccessSnackbar(getActivity(), "Debt saved");
                 }
             }
         });
@@ -92,6 +110,19 @@ public class AddDebtFragment extends DialogFragment {
         Bundle args = new Bundle();
         args.putString("title", title);
         fragment.setArguments(args);
+
+        return fragment;
+    }
+
+    public static AddDebtFragment newInstance(String title, long debtId) {
+        AddDebtFragment fragment = new AddDebtFragment();
+        Bundle args = new Bundle();
+
+        args.putString("title", title);
+        args.putLong("debtId", debtId);
+
+        fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -118,7 +149,8 @@ public class AddDebtFragment extends DialogFragment {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case CONTACT_PICKER:
-                    mNameEt.setText(getContactName(data));
+                    mNameEt.setText("");
+                    mNameEt.append(getContactName(data));
                     break;
             }
         }
