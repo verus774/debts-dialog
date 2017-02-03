@@ -1,6 +1,7 @@
 package by.verus.debts;
 
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,6 +13,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -19,16 +21,20 @@ import com.activeandroid.query.Update;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
 
-public class AddDebtFragment extends DialogFragment {
+public class AddDebtFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     private EditText mSumEt;
     private EditText mNameEt;
+    private EditText dateEt;
     private AwesomeValidation mAwesomeValidation;
 
     private final static int CONTACT_PICKER = 1;
@@ -47,13 +53,25 @@ public class AddDebtFragment extends DialogFragment {
 
         mNameEt = (EditText) formElementsView.findViewById(R.id.nameEt);
         mSumEt = (EditText) formElementsView.findViewById(R.id.sumEt);
+        dateEt = (EditText) formElementsView.findViewById(R.id.dateEt);
 
         if (debtId != 0) {
             Debt debt = Debt.findById(debtId);
 
             mNameEt.append(debt.getName());
             mSumEt.append(String.valueOf(debt.getSum()));
+            dateEt.append(getDateStr(debt.getTimestamp()));
+        } else {
+            dateEt.append(getDateStr(new Date()));
         }
+
+        dateEt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog(new Date());
+            }
+        });
+
 
         mAwesomeValidation = new AwesomeValidation(BASIC);
         mAwesomeValidation.addValidation(mNameEt, RegexTemplate.NOT_EMPTY, getString(R.string.err_required));
@@ -80,7 +98,6 @@ public class AddDebtFragment extends DialogFragment {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (mAwesomeValidation.validate()) {
                     if (debtId == 0) {
                         new Debt(
@@ -155,4 +172,32 @@ public class AddDebtFragment extends DialogFragment {
             }
         }
     }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+        Calendar newDate = Calendar.getInstance();
+        newDate.set(year, month, dayOfMonth);
+
+        dateEt.setText(getDateStr(newDate.getTime()));
+    }
+
+    private void showDatePickerDialog(Date date) {
+//        DatePickerFragment.newInstance(date, this).show(getActivity().getSupportFragmentManager(), "datePicker");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        new DatePickerDialog(getActivity(), this, year, month, day).show();
+    }
+
+    private String getDateStr(Date date) {
+        DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.ENGLISH);
+        return df.format(date);
+    }
+
 }
