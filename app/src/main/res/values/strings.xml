@@ -7,6 +7,6 @@
     <string name="generate_debts">Generate debts</string>
     <string name="delete">Delete</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="debt_saved">Debt saved</string>
+    <string name="add_debt">Add debt</string>
 </resources>

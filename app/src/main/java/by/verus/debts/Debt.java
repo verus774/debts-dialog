@@ -4,6 +4,7 @@ import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 
 import java.util.Calendar;
@@ -73,6 +74,10 @@ public class Debt extends Model {
                 .from(Debt.class)
                 .where("Id = ?", id)
                 .executeSingle();
+    }
+
+    public static void deleteAll() {
+        new Delete().from(Debt.class).execute();
     }
 
     public static void generateDebts(int count) {

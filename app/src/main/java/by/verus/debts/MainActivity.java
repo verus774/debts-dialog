@@ -16,8 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.activeandroid.query.Delete;
-
 public class MainActivity extends AppCompatActivity {
 
     private static RecyclerView mDebtsRv;
@@ -79,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_clear_all) {
-            new Delete().from(Debt.class).execute();
+            Debt.deleteAll();
             updateList();
             return true;
         } else if (id == R.id.action_generate_debts) {
@@ -99,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void showAddDebtDialog() {
         FragmentManager fm = getSupportFragmentManager();
-        AddDebtFragment addDebtFragment = AddDebtFragment.newInstance("Add debt");
-        addDebtFragment.show(fm, "ss");
+        AddDebtFragment addDebtFragment = AddDebtFragment.newInstance(getString(R.string.add_debt));
+        addDebtFragment.show(fm, "addDebtDialog");
     }
 
 }

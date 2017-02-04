@@ -13,6 +13,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -34,10 +35,13 @@ public class AddDebtFragment extends DialogFragment implements DatePickerDialog.
 
     private EditText mSumEt;
     private EditText mNameEt;
-    private EditText dateEt;
+    private Button mDateBtn;
     private AwesomeValidation mAwesomeValidation;
 
     private final static int CONTACT_PICKER = 1;
+
+    private static final String ARG_TITLE = "title";
+    private static final String ARG_DEBT_ID = "debtId";
 
 
     public AddDebtFragment() {
@@ -46,26 +50,26 @@ public class AddDebtFragment extends DialogFragment implements DatePickerDialog.
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        String title = getArguments().getString("title");
-        final long debtId = getArguments().getLong("debtId");
+        String title = getArguments().getString(ARG_TITLE);
+        final long debtId = getArguments().getLong(ARG_DEBT_ID);
 
         View formElementsView = View.inflate(getActivity(), R.layout.fragment_add_debt, null);
 
         mNameEt = (EditText) formElementsView.findViewById(R.id.nameEt);
         mSumEt = (EditText) formElementsView.findViewById(R.id.sumEt);
-        dateEt = (EditText) formElementsView.findViewById(R.id.dateEt);
+        mDateBtn = (Button) formElementsView.findViewById(R.id.dateBtn);
 
         if (debtId != 0) {
             Debt debt = Debt.findById(debtId);
 
             mNameEt.append(debt.getName());
             mSumEt.append(String.valueOf(debt.getSum()));
-            dateEt.append(getDateStr(debt.getTimestamp()));
+            mDateBtn.setText(getDateStr(debt.getTimestamp()));
         } else {
-            dateEt.append(getDateStr(new Date()));
+            mDateBtn.setText(getDateStr(new Date()));
         }
 
-        dateEt.setOnClickListener(new View.OnClickListener() {
+        mDateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDatePickerDialog(new Date());
@@ -114,7 +118,7 @@ public class AddDebtFragment extends DialogFragment implements DatePickerDialog.
 
                     dialog.dismiss();
                     MainActivity.updateList();
-                    MainActivity.showSuccessSnackbar(getActivity(), "Debt saved");
+                    MainActivity.showSuccessSnackbar(getActivity(), getString(R.string.debt_saved));
                 }
             }
         });
@@ -125,7 +129,7 @@ public class AddDebtFragment extends DialogFragment implements DatePickerDialog.
     public static AddDebtFragment newInstance(String title) {
         AddDebtFragment fragment = new AddDebtFragment();
         Bundle args = new Bundle();
-        args.putString("title", title);
+        args.putString(ARG_TITLE, title);
         fragment.setArguments(args);
 
         return fragment;
@@ -135,8 +139,8 @@ public class AddDebtFragment extends DialogFragment implements DatePickerDialog.
         AddDebtFragment fragment = new AddDebtFragment();
         Bundle args = new Bundle();
 
-        args.putString("title", title);
-        args.putLong("debtId", debtId);
+        args.putString(ARG_TITLE, title);
+        args.putLong(ARG_DEBT_ID, debtId);
 
         fragment.setArguments(args);
 
@@ -179,12 +183,10 @@ public class AddDebtFragment extends DialogFragment implements DatePickerDialog.
         Calendar newDate = Calendar.getInstance();
         newDate.set(year, month, dayOfMonth);
 
-        dateEt.setText(getDateStr(newDate.getTime()));
+        mDateBtn.setText(getDateStr(newDate.getTime()));
     }
 
     private void showDatePickerDialog(Date date) {
-//        DatePickerFragment.newInstance(date, this).show(getActivity().getSupportFragmentManager(), "datePicker");
-
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
