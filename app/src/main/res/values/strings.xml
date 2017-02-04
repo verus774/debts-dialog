@@ -9,4 +9,6 @@
 
     <string name="debt_saved">Debt saved</string>
     <string name="add_debt">Add debt</string>
+    <string name="edit_debt">Edit debt</string>
+    <string name="success_deleted">Success deleted</string>
 </resources>

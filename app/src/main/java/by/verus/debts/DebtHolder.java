@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.activeandroid.query.Delete;
 
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -39,14 +39,16 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
         nameTv.setText(debt.getName());
         sumTv.setText(String.valueOf(debt.getSum()));
 
-        DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.ENGLISH);
-        String strDate = df.format(debt.getTimestamp());
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
+        String strDate = sdf.format(debt.getTimestamp());
         dateTv.setText(strDate);
 
         moreTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                PopupMenu popup = new PopupMenu(v.getContext(), v);
+                final Context context = v.getContext();
+
+                PopupMenu popup = new PopupMenu(context, v);
                 popup.inflate(R.menu.menu_item_debt);
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -58,7 +60,7 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
                                         .where("Id=?", mDebt.getId())
                                         .execute();
                                 MainActivity.updateList();
-                                MainActivity.showSuccessSnackbar(v.getContext(), "Success deleted");
+                                MainActivity.showSuccessSnackbar(context, context.getString(R.string.success_deleted));
                                 break;
                         }
                         return false;
@@ -74,7 +76,7 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
     public void onClick(View v) {
         final Context context = v.getContext();
         FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
-        AddDebtFragment addDebtFragment = AddDebtFragment.newInstance("Edit debt", mDebt.getId());
-        addDebtFragment.show(fm, "ss");
+        AddDebtFragment addDebtFragment = AddDebtFragment.newInstance(context.getString(R.string.edit_debt), mDebt.getId());
+        addDebtFragment.show(fm, "editDebtDialog");
     }
 }

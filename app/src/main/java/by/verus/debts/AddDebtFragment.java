@@ -18,11 +18,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.activeandroid.query.Update;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 
-import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -36,6 +36,7 @@ public class AddDebtFragment extends DialogFragment implements DatePickerDialog.
     private EditText mSumEt;
     private EditText mNameEt;
     private Button mDateBtn;
+    Debt debt;
     private AwesomeValidation mAwesomeValidation;
 
     private final static int CONTACT_PICKER = 1;
@@ -60,13 +61,13 @@ public class AddDebtFragment extends DialogFragment implements DatePickerDialog.
         mDateBtn = (Button) formElementsView.findViewById(R.id.dateBtn);
 
         if (debtId != 0) {
-            Debt debt = Debt.findById(debtId);
+            debt = Debt.findById(debtId);
 
             mNameEt.append(debt.getName());
             mSumEt.append(String.valueOf(debt.getSum()));
-            mDateBtn.setText(getDateStr(debt.getTimestamp()));
+            mDateBtn.setText(getStrFromDate(debt.getTimestamp()));
         } else {
-            mDateBtn.setText(getDateStr(new Date()));
+            mDateBtn.setText(getStrFromDate(new Date()));
         }
 
         mDateBtn.setOnClickListener(new View.OnClickListener() {
@@ -103,17 +104,19 @@ public class AddDebtFragment extends DialogFragment implements DatePickerDialog.
             @Override
             public void onClick(View v) {
                 if (mAwesomeValidation.validate()) {
+                    Date newDate = getDateFromStr(mDateBtn.getText().toString());
+
                     if (debtId == 0) {
                         new Debt(
                                 mNameEt.getText().toString(),
                                 Integer.parseInt(mSumEt.getText().toString()),
-                                new Date()
+                                newDate
                         ).save();
                     } else {
-                        new Update(Debt.class)
-                                .set("name=?," + "sum=?", mNameEt.getText(), Integer.valueOf(mSumEt.getText().toString()))
-                                .where("Id=?", debtId)
-                                .execute();
+                        debt.setName(mNameEt.getText().toString());
+                        debt.setSum(Integer.valueOf(mSumEt.getText().toString()));
+                        debt.setTimestamp(newDate);
+                        debt.save();
                     }
 
                     dialog.dismiss();
@@ -183,7 +186,7 @@ public class AddDebtFragment extends DialogFragment implements DatePickerDialog.
         Calendar newDate = Calendar.getInstance();
         newDate.set(year, month, dayOfMonth);
 
-        mDateBtn.setText(getDateStr(newDate.getTime()));
+        mDateBtn.setText(getStrFromDate(newDate.getTime()));
     }
 
     private void showDatePickerDialog(Date date) {
@@ -197,9 +200,26 @@ public class AddDebtFragment extends DialogFragment implements DatePickerDialog.
         new DatePickerDialog(getActivity(), this, year, month, day).show();
     }
 
-    private String getDateStr(Date date) {
-        DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.ENGLISH);
-        return df.format(date);
+    private String getStrFromDate(Date date) {
+        // TODO: remove duplicate code
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
+        return sdf.format(date);
+    }
+
+    private Date getDateFromStr(String dateStr) {
+        // TODO: remove duplicate code
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
+        Date date = null;
+
+        try {
+            date = sdf.parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return date;
     }
 
 }
