@@ -1,12 +1,8 @@
 package by.verus.debts;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,7 +17,6 @@ import by.verus.debts.fragment.AddDebtFragment;
 public class MainActivity extends AppCompatActivity {
 
     private static RecyclerView mDebtsRv;
-    private static CoordinatorLayout mCoordinatorLayout;
     private static RecyclerViewAdapter mAdapter;
 
     @Override
@@ -31,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         mDebtsRv = (RecyclerView) findViewById(R.id.debtsRv);
 
         LinearLayoutManager lm = new LinearLayoutManager(this);
@@ -88,13 +82,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public static void showSuccessSnackbar(Context context, String message) {
-        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_SHORT);
-        View snackBarView = snackbar.getView();
-        snackBarView.setBackgroundColor(ContextCompat.getColor(context, R.color.snackbar_success));
-        snackbar.show();
     }
 
     private void showAddDebtDialog() {

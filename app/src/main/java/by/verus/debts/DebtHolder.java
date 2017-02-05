@@ -13,6 +13,7 @@ import com.activeandroid.query.Delete;
 
 import by.verus.debts.fragment.AddDebtFragment;
 import by.verus.debts.util.DateUtils;
+import by.verus.debts.util.Utils;
 
 public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -56,9 +57,11 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
                                         .from(Debt.class)
                                         .where("Id=?", mDebt.getId())
                                         .execute();
+
                                 MainActivity.updateList();
-                                // TODO
-                                MainActivity.showSuccessSnackbar(context, context.getString(R.string.success_deleted));
+
+                                View cl = ((MainActivity) context).findViewById(R.id.coordinatorLayout);
+                                Utils.showSuccessSnakbar(context, cl, context.getString(R.string.success_deleted));
                                 break;
                         }
                         return false;

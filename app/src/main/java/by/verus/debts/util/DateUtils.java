@@ -7,14 +7,13 @@ import java.util.Date;
 import java.util.Locale;
 
 public class DateUtils {
+    private static SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
 
     public static String getStrFromDate(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
         return sdf.format(date);
     }
 
     public static Date getDateFromStr(String dateStr) {
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
         Date date = null;
 
         try {
