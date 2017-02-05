@@ -1,4 +1,4 @@
-package by.verus.debts;
+package by.verus.debts.fragment;
 
 
 import android.app.DatePickerDialog;
@@ -21,11 +21,14 @@ import android.widget.ImageView;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
+
+import by.verus.debts.Debt;
+import by.verus.debts.MainActivity;
+import by.verus.debts.R;
+import by.verus.debts.util.DateUtils;
+import by.verus.debts.util.Utils;
 
 import static android.app.Activity.RESULT_OK;
 import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
@@ -65,9 +68,9 @@ public class AddDebtFragment extends DialogFragment implements DatePickerDialog.
 
             mNameEt.append(debt.getName());
             mSumEt.append(String.valueOf(debt.getSum()));
-            mDateBtn.setText(getStrFromDate(debt.getTimestamp()));
+            mDateBtn.setText(DateUtils.getStrFromDate(debt.getTimestamp()));
         } else {
-            mDateBtn.setText(getStrFromDate(new Date()));
+            mDateBtn.setText(DateUtils.getStrFromDate(new Date()));
         }
 
         mDateBtn.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +107,7 @@ public class AddDebtFragment extends DialogFragment implements DatePickerDialog.
             @Override
             public void onClick(View v) {
                 if (mAwesomeValidation.validate()) {
-                    Date newDate = getDateFromStr(mDateBtn.getText().toString());
+                    Date newDate = DateUtils.getDateFromStr(mDateBtn.getText().toString());
 
                     if (debtId == 0) {
                         new Debt(
@@ -121,7 +124,8 @@ public class AddDebtFragment extends DialogFragment implements DatePickerDialog.
 
                     dialog.dismiss();
                     MainActivity.updateList();
-                    MainActivity.showSuccessSnackbar(getActivity(), getString(R.string.debt_saved));
+
+                    Utils.showSuccessSnakbar(getContext(), getActivity().findViewById(R.id.coordinatorLayout), getString(R.string.debt_saved));
                 }
             }
         });
@@ -186,7 +190,7 @@ public class AddDebtFragment extends DialogFragment implements DatePickerDialog.
         Calendar newDate = Calendar.getInstance();
         newDate.set(year, month, dayOfMonth);
 
-        mDateBtn.setText(getStrFromDate(newDate.getTime()));
+        mDateBtn.setText(DateUtils.getStrFromDate(newDate.getTime()));
     }
 
     private void showDatePickerDialog(Date date) {
@@ -200,26 +204,6 @@ public class AddDebtFragment extends DialogFragment implements DatePickerDialog.
         new DatePickerDialog(getActivity(), this, year, month, day).show();
     }
 
-    private String getStrFromDate(Date date) {
-        // TODO: remove duplicate code
 
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
-        return sdf.format(date);
-    }
-
-    private Date getDateFromStr(String dateStr) {
-        // TODO: remove duplicate code
-
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
-        Date date = null;
-
-        try {
-            date = sdf.parse(dateStr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return date;
-    }
 
 }

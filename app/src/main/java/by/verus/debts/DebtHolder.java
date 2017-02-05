@@ -11,24 +11,24 @@ import android.widget.TextView;
 
 import com.activeandroid.query.Delete;
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
+import by.verus.debts.fragment.AddDebtFragment;
+import by.verus.debts.util.DateUtils;
 
 public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    private TextView nameTv;
-    private TextView sumTv;
-    private TextView moreTv;
-    private TextView dateTv;
+    private TextView mNameTv;
+    private TextView mSumTv;
+    private TextView mMoreTv;
+    private TextView mDateTv;
     private Debt mDebt;
 
     public DebtHolder(View itemView) {
         super(itemView);
 
-        nameTv = (TextView) itemView.findViewById(R.id.nameTv);
-        sumTv = (TextView) itemView.findViewById(R.id.sumTv);
-        dateTv = (TextView) itemView.findViewById(R.id.dateTv);
-        moreTv = (TextView) itemView.findViewById(R.id.moreTv);
+        mNameTv = (TextView) itemView.findViewById(R.id.nameTv);
+        mSumTv = (TextView) itemView.findViewById(R.id.sumTv);
+        mDateTv = (TextView) itemView.findViewById(R.id.dateTv);
+        mMoreTv = (TextView) itemView.findViewById(R.id.moreTv);
 
         itemView.setOnClickListener(this);
     }
@@ -36,14 +36,11 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
     public void bindDebt(Debt debt) {
         mDebt = debt;
 
-        nameTv.setText(debt.getName());
-        sumTv.setText(String.valueOf(debt.getSum()));
+        mNameTv.setText(debt.getName());
+        mSumTv.setText(String.valueOf(debt.getSum()));
+        mDateTv.setText(DateUtils.getStrFromDate(debt.getTimestamp()));
 
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
-        String strDate = sdf.format(debt.getTimestamp());
-        dateTv.setText(strDate);
-
-        moreTv.setOnClickListener(new View.OnClickListener() {
+        mMoreTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 final Context context = v.getContext();
@@ -60,6 +57,7 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
                                         .where("Id=?", mDebt.getId())
                                         .execute();
                                 MainActivity.updateList();
+                                // TODO
                                 MainActivity.showSuccessSnackbar(context, context.getString(R.string.success_deleted));
                                 break;
                         }

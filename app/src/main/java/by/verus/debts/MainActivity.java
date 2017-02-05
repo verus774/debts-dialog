@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import by.verus.debts.fragment.AddDebtFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     private static RecyclerView mDebtsRv;
