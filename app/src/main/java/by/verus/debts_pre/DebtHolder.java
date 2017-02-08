@@ -1,4 +1,4 @@
-package by.verus.debts;
+package by.verus.debts_pre;
 
 
 import android.content.Context;
@@ -11,9 +11,9 @@ import android.widget.TextView;
 
 import com.activeandroid.query.Delete;
 
-import by.verus.debts.fragment.AddDebtFragment;
-import by.verus.debts.util.DateUtils;
-import by.verus.debts.util.Utils;
+import by.verus.debts_pre.fragment.AddDebtFragment;
+import by.verus.debts_pre.util.DateUtils;
+import by.verus.debts_pre.util.Utils;
 
 public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

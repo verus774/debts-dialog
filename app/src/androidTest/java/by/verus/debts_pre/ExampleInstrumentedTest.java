@@ -1,4 +1,4 @@
-package by.verus.debts;
+package by.verus.debts_pre;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("by.verus.debts", appContext.getPackageName());
+        assertEquals("by.verus.debts_pre", appContext.getPackageName());
     }
 }

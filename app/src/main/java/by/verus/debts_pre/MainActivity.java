@@ -1,4 +1,4 @@
-package by.verus.debts;
+package by.verus.debts_pre;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,7 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import by.verus.debts.fragment.AddDebtFragment;
+import by.verus.debts_pre.fragment.AddDebtFragment;
 
 public class MainActivity extends AppCompatActivity {
 

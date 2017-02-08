@@ -1,4 +1,4 @@
-package by.verus.debts;
+package by.verus.debts_pre;
 
 
 import android.support.v7.widget.RecyclerView;

@@ -1,4 +1,4 @@
-package by.verus.debts;
+package by.verus.debts_pre;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;

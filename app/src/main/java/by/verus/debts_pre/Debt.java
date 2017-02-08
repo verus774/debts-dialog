@@ -1,4 +1,4 @@
-package by.verus.debts;
+package by.verus.debts_pre;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Model;

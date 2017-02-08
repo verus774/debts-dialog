@@ -1,4 +1,4 @@
-package by.verus.debts.util;
+package by.verus.debts_pre.util;
 
 
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
-import by.verus.debts.R;
+import by.verus.debts_pre.R;
 
 public class Utils {
 
