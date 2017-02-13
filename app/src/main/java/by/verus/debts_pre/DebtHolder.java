@@ -1,7 +1,9 @@
 package by.verus.debts_pre;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -60,7 +62,7 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
 
                                 MainActivity.updateList();
 
-                                View cl = ((MainActivity) context).findViewById(R.id.coordinatorLayout);
+                                View cl = getActivity(context).findViewById(R.id.coordinatorLayout);
                                 Utils.showSuccessSnakbar(context, cl, context.getString(R.string.success_deleted));
                                 break;
                         }
@@ -79,5 +81,15 @@ public class DebtHolder extends RecyclerView.ViewHolder implements View.OnClickL
         FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
         AddDebtFragment addDebtFragment = AddDebtFragment.newInstance(context.getString(R.string.edit_debt), mDebt.getId());
         addDebtFragment.show(fm, "editDebtDialog");
+    }
+
+    private Activity getActivity(Context context) {
+        while (context instanceof ContextWrapper) {
+            if (context instanceof Activity) {
+                return (Activity) context;
+            }
+            context = ((ContextWrapper) context).getBaseContext();
+        }
+        return null;
     }
 }
